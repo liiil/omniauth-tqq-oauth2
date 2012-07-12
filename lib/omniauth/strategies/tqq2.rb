@@ -2,7 +2,7 @@ require 'omniauth-oauth2'
 
 module OmniAuth
   module Strategies
-    class Tqq < OmniAuth::Strategies::OAuth2
+    class Tqq2 < OmniAuth::Strategies::OAuth2
       # Give your strategy a name.
       option :name, "tqq2"
 

@@ -1,2 +1,2 @@
 require "omniauth-tqq-oauth2/version"
-require 'omniauth/strategies/tqq'
+require 'omniauth/strategies/tqq2'
