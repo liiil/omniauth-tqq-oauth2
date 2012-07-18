@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["cqpanxu@gmail.com"]
   gem.description   = %q{OmniAuth Oauth2 strategy for t.qq.com.}
   gem.summary       = %q{OmniAuth Oauth2 strategy for t.qq.com.}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/cqpx/omniauth-tqq-oauth2"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
