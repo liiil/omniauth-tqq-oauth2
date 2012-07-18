@@ -23,13 +23,17 @@ module OmniAuth
       # or as a URI parameter). This may not be possible with all
       # providers.
       uid {
-        access_token["openid"]
+        raw_info["name"]
       }
 
       info do
         {
-          :name => raw_info['name'],
-          :email => raw_info['email']
+          :name        => raw_info['name'],
+          :nickname    => raw_info['nick'],
+          :email       => raw_info['email'],
+          :location    => raw_info['location'],
+          :image       => raw_info['head'],
+          :description => raw_info['introduction']
         }
       end
 
@@ -49,30 +53,12 @@ module OmniAuth
         hash
       end
 
-      def build_access_token
-        verifier = request.params['code']
-        @ac_token ||= client.auth_code.get_token(verifier, {:redirect_uri => callback_url}.merge(token_params.to_hash(:symbolize_keys => true)))
-      end
-
       def callback_phase
-        if request.params['error'] || request.params['error_reason']
-          raise CallbackError.new(request.params['error'], request.params['error_description'] || request.params['error_reason'], request.params['error_uri'])
-        end
-
-        self.access_token = build_access_token
-        self.access_token = access_token.refresh! if access_token.expired?
+        # 伪造防csrf的state，腾讯微博NMMP
+        request.params['state'] = session['omniauth.state']
         @openid = request.params["openid"]
         @openkey = request.params["openkey"]
-
         super
-      rescue ::OAuth2::Error, CallbackError => e
-        fail!(:invalid_credentials, e)
-      rescue ::MultiJson::DecodeError => e
-        fail!(:invalid_response, e)
-      rescue ::Timeout::Error, ::Errno::ETIMEDOUT => e
-        fail!(:timeout, e)
-      rescue ::SocketError => e
-        fail!(:failed_to_connect, e)
       end
 
       def raw_info
@@ -81,7 +67,7 @@ module OmniAuth
           oauth_consumer_key: access_token.client.id,
           access_token: access_token.token,
           oauth_version: '2.a'
-        }, parse: :json).parsed
+        }, parse: :json).parsed["data"]
       end
     end
   end
