@@ -62,12 +62,12 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= access_token.get("/api/user/info", params: {
-          openid: @openid,
-          oauth_consumer_key: access_token.client.id,
-          access_token: access_token.token,
-          oauth_version: '2.a'
-        }, parse: :json).parsed["data"]
+        @raw_info ||= access_token.get("/api/user/info", :params => {
+          :openid => @openid,
+          :oauth_consumer_key => access_token.client.id,
+          :access_token => access_token.token,
+          :oauth_version => '2.a'
+        }, :parse => :json).parsed["data"]
       end
     end
   end
